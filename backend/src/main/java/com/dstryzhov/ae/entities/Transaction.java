@@ -29,8 +29,8 @@ public class Transaction {
     private BigDecimal amount;
 
     @CreatedDate
-    @Temporal(TemporalType.DATE)
-    @ColumnDefault("current_date()")
+    @Temporal(TemporalType.TIMESTAMP)
+    @ColumnDefault("now()")
     private Date effectiveDate = new Date();
 
     public Transaction(Type type, BigDecimal amount) {
