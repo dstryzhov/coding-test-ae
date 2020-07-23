@@ -3,6 +3,7 @@ package com.dstryzhov.ae.service;
 import com.dstryzhov.ae.dto.AccountDto;
 import com.dstryzhov.ae.dto.TransactionDto;
 import com.dstryzhov.ae.entities.Account;
+import com.dstryzhov.ae.entities.Transaction;
 import com.dstryzhov.ae.exceptions.NoAccountException;
 import com.dstryzhov.ae.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,11 @@ public class AccountService {
         Account account = accountRepository.findById(ACCOUNT_ID)
                 .orElseThrow(NoAccountException::new);
 
-        account.setBalance(account.getBalance().add(dto.getAmount()));
-
+        if (dto.getType() == Transaction.Type.credit) {
+            accountRepository.updateBalance(ACCOUNT_ID,
+                    account.getBalance().subtract(dto.getAmount()));
+            return;
+        }
         accountRepository.updateBalance(ACCOUNT_ID, account.getBalance().add(dto.getAmount()));
     }
 }
